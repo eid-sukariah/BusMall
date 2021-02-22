@@ -5,7 +5,10 @@ main div img {
 }
 
 main ul{
-    font-size: 30px;
+    font-size: 20px;
+}
+main ul li{
+    margin: 20px;
 }
 .note{
    
