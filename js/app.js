@@ -6,7 +6,7 @@ let imgleft = document.getElementById('img3');
 let maxAttempt = 25;
 let counterAttempt =0;
 let objectsArray = [];
-
+let NameArray = [];
 function basMall(name, image){
     this.name = name;
     this.image = image;
@@ -14,6 +14,7 @@ function basMall(name, image){
     this.counterClick =0;
     //console.log(this);
     objectsArray.push(this);
+    NameArray.push(this.name)
 }
 
 
@@ -61,10 +62,15 @@ while((rightImageIndex === midleImageIndex) || (rightImageIndex === leftImageInd
     rightImageIndex = generateRandomNo();
 }
 
-//.textContent     atribute name     value
+//.textContent     atribute ('name' , value)
 imgRight.setAttribute('src', objectsArray[rightImageIndex].image);
-imgMiddle.setAttribute('src', objectsArray[midleImageIndex].image);      // setAttribute : for any attribute
+objectsArray[rightImageIndex].imageShow++ ;                            //in if was wrong
+
+imgMiddle.setAttribute('src', objectsArray[midleImageIndex].image);
+objectsArray[midleImageIndex].imageShow++ ;
+
 imgleft.setAttribute('src', objectsArray[leftImageIndex].image);
+objectsArray[leftImageIndex].imageShow++ ;
 
 
 }
@@ -85,23 +91,56 @@ function handleClicking(event){
     counterAttempt++ ;
     if(counterAttempt <= maxAttempt){
         if(event.target.id === 'img1'){
-        objectsArray[rightImageIndex].imageShow++ ;
+        objectsArray[rightImageIndex].counterClick++ ;
+
         }else if (event.target.id === 'img2'){
-        objectsArray[midleImageIndex].imageShow++ ;
         objectsArray[midleImageIndex].counterClick++ ;
         }else{
-        objectsArray[leftImageIndex].imageShow++ ;
         objectsArray[leftImageIndex].counterClick++ ;
     }
+    renderThreeImage();
+
     }else{
+        chartRender()
         let unList = document.getElementById('ulist');
         let li;
         for(let i=0; i < objectsArray.length; i++){
             li = document.createElement('li');
             unList.appendChild(li);
-           li.textContent = `${objectsArray[i].name} had ${objectsArray[i].counterClick}votes, and was seen ${objectsArray[i].imageShow}times.`
+           li.textContent = `${objectsArray[i].name} ==> had [${objectsArray[i].counterClick}]votes, and was seen [${objectsArray[i].imageShow}]times.`
         } 
+        div.removeEventListener('click', handleClicking);
     }
 
-    div.removeEventListener('click', handleClicking);
+    
+}
+
+
+//  button.addEventListener('click', function()){
+
+//  }
+
+
+function chartRender(){
+var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        labels: NameArray,
+        datasets: [{
+            label: 'My First dataset',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: [0, 10, 5, 2, 20, 30, 45]
+        }]
+    },
+
+    // Configuration options go here
+    options: {}
+});
+
+console.log(chart);
 }

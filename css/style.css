@@ -1,5 +1,19 @@
 main div img {
-    width: 300px;
-    height: 300px;
-    padding-left: 50px;
+    width: 350px;
+    height: 350px;
+    padding-left: 70px;
+}
+
+main ul{
+    font-size: 20px;
+}
+main ul li{
+    margin: 20px;
+}
+.note{
+   
+   font-weight: bold;
+}
+main p{
+    font-size: 20px;
 }
