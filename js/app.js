@@ -2,16 +2,21 @@
 let imgRight = document.getElementById('img1');
 let imgMiddle = document.getElementById('img2');
 let imgleft = document.getElementById('img3');
-// imgRight.setAttribute('src','/img/bag.jpg');
+
 let maxAttempt = 25;
 let counterAttempt =0;
 let objectsArray = [];
 let NameArray = [];
+let votArr = [];
+let showArr = [];
+let firstTry = [];
+
 function basMall(name, image){
     this.name = name;
     this.image = image;
-    this.imageShow = 0;
+    this.showArr = 0;
     this.counterClick =0;
+    this.imageShow = 0;
     //console.log(this);
     objectsArray.push(this);
     NameArray.push(this.name)
@@ -62,9 +67,20 @@ while((rightImageIndex === midleImageIndex) || (rightImageIndex === leftImageInd
     rightImageIndex = generateRandomNo();
 }
 
+firstTry.push(leftImageIndex, rightImageIndex, midleImageIndex)
+console.log(firstTry);
+if(counterAttempt !== 0){
+
+while((rightImageIndex === firstTry[0]) || (rightImageIndex === firstTry[1]) || (firstTry[2] === midleImageIndex)){
+    leftImageIndex = generateRandomNo();
+    rightImageIndex = generateRandomNo();
+    midleImageIndex = generateRandomNo();
+}
+}
+
 //.textContent     atribute ('name' , value)
 imgRight.setAttribute('src', objectsArray[rightImageIndex].image);
-objectsArray[rightImageIndex].imageShow++ ;                            //in if was wrong
+objectsArray[rightImageIndex].imageShow++ ;                            //put this counter in if was wrong
 
 imgMiddle.setAttribute('src', objectsArray[midleImageIndex].image);
 objectsArray[midleImageIndex].imageShow++ ;
@@ -72,8 +88,8 @@ objectsArray[midleImageIndex].imageShow++ ;
 imgleft.setAttribute('src', objectsArray[leftImageIndex].image);
 objectsArray[leftImageIndex].imageShow++ ;
 
-
 }
+
 renderThreeImage();
 
 
@@ -86,7 +102,7 @@ div.addEventListener('click', handleClicking);
 
                       //objact
 function handleClicking(event){
-    console.log(event);
+    //console.log(event);
 
     counterAttempt++ ;
     if(counterAttempt <= maxAttempt){
@@ -95,13 +111,13 @@ function handleClicking(event){
 
         }else if (event.target.id === 'img2'){
         objectsArray[midleImageIndex].counterClick++ ;
+        
         }else{
         objectsArray[leftImageIndex].counterClick++ ;
     }
     renderThreeImage();
 
     }else{
-        chartRender()
         let unList = document.getElementById('ulist');
         let li;
         for(let i=0; i < objectsArray.length; i++){
@@ -109,6 +125,8 @@ function handleClicking(event){
             unList.appendChild(li);
            li.textContent = `${objectsArray[i].name} ==> had [${objectsArray[i].counterClick}]votes, and was seen [${objectsArray[i].imageShow}]times.`
         } 
+        chartRender()
+
         div.removeEventListener('click', handleClicking);
     }
 
@@ -121,7 +139,12 @@ function handleClicking(event){
 //  }
 
 
+
 function chartRender(){
+    for(let j=0; j < objectsArray.length; j++){
+        votArr.push(objectsArray[j].showArr)
+        showArr.push(objectsArray[j].counterClick)
+        }
 var ctx = document.getElementById('myChart').getContext('2d');
 var chart = new Chart(ctx, {
     // The type of chart we want to create
@@ -131,10 +154,15 @@ var chart = new Chart(ctx, {
     data: {
         labels: NameArray,
         datasets: [{
-            label: 'My First dataset',
-            backgroundColor: 'rgb(255, 99, 132)',
+            label: 'votes',
+            backgroundColor: '#413c69',
             borderColor: 'rgb(255, 99, 132)',
-            data: [0, 10, 5, 2, 20, 30, 45]
+            data: votArr,
+        },{
+            label: 'imageShow',
+            backgroundColor: '#4a47a3',
+            borderColor: 'rgb(255, 99, 132)',
+            data: showArr,
         }]
     },
 
@@ -142,5 +170,6 @@ var chart = new Chart(ctx, {
     options: {}
 });
 
-console.log(chart);
+console.log(votArr);
 }
+console.log(showArr)
