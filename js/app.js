@@ -38,7 +38,7 @@ new basMall('unicorn','img/unicorn.jpg');
 new basMall('usb','img/usb.gif');
 new basMall('water-can','img/water-can.jpg');
 new basMall('wine-glass','img/wine-glass.jpg');
-//new.basMall('wine-glass','img/wine-glass.jpg');
+
 //console.log(objectsArray);
 
 
