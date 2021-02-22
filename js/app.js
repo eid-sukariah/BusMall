@@ -61,7 +61,7 @@ while((rightImageIndex === midleImageIndex) || (rightImageIndex === leftImageInd
     rightImageIndex = generateRandomNo();
 }
 
-//.textContent     atribute name     value
+//.textContent     atribute ('name' , value)
 imgRight.setAttribute('src', objectsArray[rightImageIndex].image);
 imgMiddle.setAttribute('src', objectsArray[midleImageIndex].image);      // setAttribute : for any attribute
 imgleft.setAttribute('src', objectsArray[leftImageIndex].image);
@@ -86,6 +86,8 @@ function handleClicking(event){
     if(counterAttempt <= maxAttempt){
         if(event.target.id === 'img1'){
         objectsArray[rightImageIndex].imageShow++ ;
+        objectsArray[rightImageIndex].counterClick++ ;
+
         }else if (event.target.id === 'img2'){
         objectsArray[midleImageIndex].imageShow++ ;
         objectsArray[midleImageIndex].counterClick++ ;
@@ -93,15 +95,23 @@ function handleClicking(event){
         objectsArray[leftImageIndex].imageShow++ ;
         objectsArray[leftImageIndex].counterClick++ ;
     }
+    renderThreeImage();
+
     }else{
         let unList = document.getElementById('ulist');
         let li;
         for(let i=0; i < objectsArray.length; i++){
             li = document.createElement('li');
             unList.appendChild(li);
-           li.textContent = `${objectsArray[i].name} had ${objectsArray[i].counterClick}votes, and was seen ${objectsArray[i].imageShow}times.`
+           li.textContent = `[${objectsArray[i].name}] had ${objectsArray[i].counterClick}votes, and was seen [${objectsArray[i].imageShow}]times.`
         } 
+        div.removeEventListener('click', handleClicking);
     }
 
-    div.removeEventListener('click', handleClicking);
+    
 }
+
+
+//  button.addEventListener('click', function()){
+
+//  }
