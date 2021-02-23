@@ -2,6 +2,7 @@
 let imgRight = document.getElementById('img1');
 let imgMiddle = document.getElementById('img2');
 let imgleft = document.getElementById('img3');
+let button = document.getElementById('button');
 
 let maxAttempt = 25;
 let counterAttempt =0;
@@ -14,10 +15,10 @@ let firstTry = [];
 function basMall(name, image){
     this.name = name;
     this.image = image;
-    this.showArr = 0;
+    //this.showArr = 0;
     this.counterClick =0;
     this.imageShow = 0;
-    //console.log(this);
+    
     objectsArray.push(this);
     NameArray.push(this.name)
 }
@@ -43,13 +44,21 @@ new basMall('unicorn','img/unicorn.jpg');
 new basMall('usb','img/usb.gif');
 new basMall('water-can','img/water-can.jpg');
 new basMall('wine-glass','img/wine-glass.jpg');
-//new.basMall('wine-glass','img/wine-glass.jpg');
 //console.log(objectsArray);
 
 
 function generateRandomNo(){
   let random =  Math.floor(Math.random()*objectsArray.length);
+
    return random; 
+
+   if (firstTry.length !== 0){
+    while(firstTry.includes(leftImageIndex) || firstTry.includes(rightImageIndex) || firstTry.includes(midleImageIndex))
+    leftImageIndex = generateRandomNo ();
+    rightImageIndex = generateRandomNo();
+    midleImageIndex = generateRandomNo();
+
+}
 }
 
 
@@ -57,7 +66,8 @@ let leftImageIndex;
 let rightImageIndex;                                      //for save a new value
 let midleImageIndex;
 function renderThreeImage(){
-    leftImageIndex = generateRandomNo();
+    firstTry = []; 
+    leftImageIndex = generateRandomNo ();
     rightImageIndex = generateRandomNo();
     midleImageIndex = generateRandomNo();
 
@@ -69,14 +79,10 @@ while((rightImageIndex === midleImageIndex) || (rightImageIndex === leftImageInd
 
 firstTry.push(leftImageIndex, rightImageIndex, midleImageIndex)
 console.log(firstTry);
-if(counterAttempt !== 0){
 
-while((rightImageIndex === firstTry[0]) || (rightImageIndex === firstTry[1]) || (firstTry[2] === midleImageIndex)){
-    leftImageIndex = generateRandomNo();
-    rightImageIndex = generateRandomNo();
-    midleImageIndex = generateRandomNo();
-}
-}
+
+
+       
 
 //.textContent     atribute ('name' , value)
 imgRight.setAttribute('src', objectsArray[rightImageIndex].image);
@@ -104,20 +110,24 @@ div.addEventListener('click', handleClicking);
 function handleClicking(event){
     //console.log(event);
 
-    counterAttempt++ ;
     if(counterAttempt <= maxAttempt){
         if(event.target.id === 'img1'){
         objectsArray[rightImageIndex].counterClick++ ;
+        counterAttempt++ ;
 
         }else if (event.target.id === 'img2'){
         objectsArray[midleImageIndex].counterClick++ ;
-        
+        counterAttempt++ ;
+
         }else{
         objectsArray[leftImageIndex].counterClick++ ;
+        counterAttempt++ ;
+
     }
     renderThreeImage();
-
+    saveVote();
     }else{
+       
         let unList = document.getElementById('ulist');
         let li;
         for(let i=0; i < objectsArray.length; i++){
@@ -128,9 +138,10 @@ function handleClicking(event){
         chartRender()
 
         div.removeEventListener('click', handleClicking);
-    }
-
+        }    
+   
     
+        //handleClicking(event);   
 }
 
 
@@ -142,13 +153,17 @@ function handleClicking(event){
 
 function chartRender(){
     for(let j=0; j < objectsArray.length; j++){
-        votArr.push(objectsArray[j].showArr)
+        votArr.push(objectsArray[j].imageShow)
         showArr.push(objectsArray[j].counterClick)
         }
+        console.log(votArr);
+        console.log(showArr);
+
+
 var ctx = document.getElementById('myChart').getContext('2d');
 var chart = new Chart(ctx, {
     // The type of chart we want to create
-    type: 'line',
+    type: 'bar',
 
     // The data for our dataset
     data: {
@@ -173,3 +188,25 @@ var chart = new Chart(ctx, {
 console.log(votArr);
 }
 console.log(showArr)
+
+
+function saveVote(){
+    let vote = objectsArray;
+    localStorage.setItem('vote',JSON.stringify(vote));
+console.log(localStorage)
+}
+let list;
+function getVoteToScreen(){
+    let getVoteToScreen = localStorage.getItem('vote')
+     list = JSON.parse(getVoteToScreen);
+    console.log(list);
+
+    if(list){
+        objectsArray = list;
+    }
+    
+}
+
+
+
+getVoteToScreen();
